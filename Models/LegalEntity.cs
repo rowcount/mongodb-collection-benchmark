@@ -16,6 +16,7 @@ namespace MongodbCollectionBanchmark.Models
         public List<Phone> Phones {get; set;}
         public List<Document> Documents {get; set;}
         public DateTimeOffset DateModify {get; set;}
+        public List<Product> Products {get; set;}
 
     }
 }
