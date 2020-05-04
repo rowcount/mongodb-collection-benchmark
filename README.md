@@ -1,2 +1,1 @@
-# mongodb-collection-benchmark
-mongodb-collection-benchmark
+docker run --name some-mongo -p 27017:27017 
