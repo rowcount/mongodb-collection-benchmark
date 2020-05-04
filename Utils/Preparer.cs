@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using MongodbCollectionBanchmark.Models;
 using Bogus;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
 using Bogus.DataSets;
+using Newtonsoft.Json;
 
 namespace MongodbCollectionBanchmark.Utils
 {
@@ -34,32 +36,36 @@ namespace MongodbCollectionBanchmark.Utils
 
         public void PrepareDocs()
         {
-            Console.WriteLine("Preparing docs started..........");
+            Console.WriteLine("Preparing docs started");
             var sw = Stopwatch.StartNew();
             var userIds = new List<string>(_count / 100);
             
-            Parallel.ForEach( Enumerable.Range(0, _count / 100), i =>
+            foreach ( var i in Enumerable.Range(0, _count / 100))
             {
                 var gender = _faker.PickRandom<Name.Gender>();
                 
-                var phone = new Faker<Phone>("ru")
+                var phones = new Faker<Phone>("ru")
                     .RuleFor(u => u.Number, f => f.Phone.PhoneNumber())
                     .Generate(3);
+                _phoneData.AddRange(phones);
 
-                var document = new Faker<Document>("ru")
+                var documents = new Faker<Document>("ru")
                     .RuleFor(u => u.Passport, f => f.Finance.Account())
                     .RuleFor(u => u.INN, f => f.Finance.Account())
                     .RuleFor(u => u.OGRN, f => f.Finance.Account())
                     .RuleFor(u => u.KPP, f => f.Finance.Account())
-                    .RuleFor(u => u.SNILS, f => f.Finance.Account());
+                    .RuleFor(u => u.SNILS, f => f.Finance.Account())
+                    .Generate(1);
+                _documentData.AddRange(documents);
 
-                var productData = new Faker<Product>("ru")
+                var products = new Faker<Product>("ru")
                     .RuleFor(u => u.Name, f => f.Commerce.Product())
                     .RuleFor(u => u.Code, f => f.Commerce.Ean13())
                     .RuleFor(u => u.Number, f => i)
-                    .Generate(5);
+                    .Generate(3);
+                _productData.AddRange(products);
 
-                var person = new Faker<Person>("ru")
+                var persons = new Faker<Person>("ru")
                     .RuleFor(u => u.PersonId, f => Guid.NewGuid())
                     .RuleFor(u => u.FirstName, f => f.Name.FirstName(gender))
                     .RuleFor(u => u.LastName, f => f.Name.LastName(gender))
@@ -67,15 +73,40 @@ namespace MongodbCollectionBanchmark.Utils
                     .RuleFor(u => u.FullName, f => f.Name.FirstName(gender)+ " " + f.Name.LastName(gender))
                     .RuleFor(u => u.Gender, f => f.Random.Bool())
                     .RuleFor(u => u.Address, f => f.Address.FullAddress())
-                    .RuleFor(u => u.DateModify, f => f.Date.RecentOffset());
+                    .RuleFor(u => u.Phones, f => phones)
+                    .RuleFor(u => u.Documents, f => documents)
+                    .RuleFor(u => u.Products, f => products)
+                    .RuleFor(u => u.DateModify, f => f.Date.RecentOffset())
+                    .Generate(1);
+                _personData.AddRange(persons);
 
-                var legalEntity = new Faker<LegalEntity>("ru")
+                var legalEntities = new Faker<LegalEntity>("ru")
                     .RuleFor(u => u.LegalEntityId, f => Guid.NewGuid())
                     .RuleFor(u => u.Name, f => f.Company.CompanyName())
-                    .RuleFor(u => u.Type, f => f.Company.CompanySuffix())
-                    .RuleFor(u => u.Address, f => f.Address.FullAddress());
-            }
-            );
+                    .RuleFor(u => u.Type, f => f.Company.CompanySuffix())                    
+                    .RuleFor(u => u.FullName, f => f.Company.CompanyName())
+                    .RuleFor(u => u.Founder, f => persons.First().PersonId)
+                    .RuleFor(u => u.Address, f => f.Address.FullAddress())
+                    .RuleFor(u => u.Phones, f =>phones)
+                    .RuleFor(u => u.Documents, f => documents)
+                    .RuleFor(u => u.Products, f => products)
+                    .RuleFor(u => u.DateModify, f => f.Date.RecentOffset())
+                    .Generate(1);
+                _legalEntityData.AddRange(legalEntities);              
+                
+                
+            };
+
+            Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
+        }
+
+         public void SaveData()
+        {
+            Console.Write("Docs saving started...........");
+            var sw = Stopwatch.StartNew();
+            File.WriteAllText(@"/tmp/_personData.json", JsonConvert.SerializeObject(_personData));
+            File.WriteAllText(@"/tmp/_legalEntityData.json", JsonConvert.SerializeObject(_legalEntityData));
+            Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
         }
 
     }
