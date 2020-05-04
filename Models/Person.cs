@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongodbCollectionBanchmark.Models
 {
     public class Person
     {
+        [BsonId]
         public Guid PersonId {get; set;}
         public string FirstName {get; set;}
         public string LastName {get; set;}
