@@ -26,12 +26,12 @@ namespace MongodbCollectionBanchmark.Utils
         public Preparer (int count, Faker faker, List<Phone> phoneData, List<Document> documentData, List<Product> productData, List<Person> personData, List<LegalEntity> legalEntityData)
         {
             _count = count;
-            _faker = faker ?? throw new ArgumentNullException(nameof(faker));
-            _phoneData = phoneData ?? throw new ArgumentNullException(nameof(phoneData));
-            _documentData = documentData ?? throw new ArgumentNullException(nameof(documentData));
-            _productData = productData ?? throw new ArgumentNullException(nameof(productData));
-            _personData = personData ?? throw new ArgumentNullException(nameof(personData));
-            _legalEntityData = legalEntityData ?? throw new ArgumentNullException(nameof(legalEntityData));
+            _faker = faker ;
+            _phoneData = phoneData ;
+            _documentData = documentData;
+            _productData = productData;
+            _personData = personData ;
+            _legalEntityData = legalEntityData ;
         }
 
         public void PrepareDocs()
@@ -97,15 +97,15 @@ namespace MongodbCollectionBanchmark.Utils
                 
             };
 
-            Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
+            Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");            
         }
 
          public void SaveData()
         {
             Console.Write("Docs saving started...........");
             var sw = Stopwatch.StartNew();
-            File.WriteAllText(@"/tmp/_personData.json", JsonConvert.SerializeObject(_personData));
-            File.WriteAllText(@"/tmp/_legalEntityData.json", JsonConvert.SerializeObject(_legalEntityData));
+            File.WriteAllText(@"/temp/_personData.json", JsonConvert.SerializeObject(_personData));
+            File.WriteAllText(@"/temp/_legalEntityData.json", JsonConvert.SerializeObject(_legalEntityData));
             Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
         }
 
