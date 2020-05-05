@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 
 namespace MongodbCollectionBanchmark.Utils
 {
+//TODO [goncharov] Лучше назвать его DataGenerator
+// сделать статическим. 
     public class Preparer
     {
         private readonly int _count;
@@ -23,6 +25,9 @@ namespace MongodbCollectionBanchmark.Utils
         private readonly List<Person> _personData;
         private readonly List<LegalEntity> _legalEntityData;
 
+        //TODO [goncharov] слешком много входных параметров, очивидно, что они объединяются в группы:
+        //TODO [goncharov] {phoneData, documentData, productData, personData, legalEntityData} == InMemoryDb, facker, count
+        //TODO [goncharov] count- очень непонятный параметр, если подумать как его правильно назвать, станет четче понятен его смысл.
         public Preparer (int count, Faker faker, List<Phone> phoneData, List<Document> documentData, List<Product> productData, List<Person> personData, List<LegalEntity> legalEntityData)
         {
             _count = count;
@@ -34,6 +39,7 @@ namespace MongodbCollectionBanchmark.Utils
             _legalEntityData = legalEntityData ;
         }
 
+        //TODO [goncharov] логичнее назвать GenerateDocs или GenerateData.
         public void PrepareDocs()
         {
             Console.WriteLine("Preparing docs started");
@@ -97,15 +103,18 @@ namespace MongodbCollectionBanchmark.Utils
                 
             };
 
+            //TODO [goncharov] нужно дернуть sw.Stop(), а то как-то не хорошо, мне кажется.
             Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");            
         }
 
+        //TODO [goncharov] это не его зона ответственности. Лучше вынести отсюда.
          public void SaveData()
         {
             Console.Write("Docs saving started...........");
             var sw = Stopwatch.StartNew();
             File.WriteAllText(@"/temp/_personData.json", JsonConvert.SerializeObject(_personData));
             File.WriteAllText(@"/temp/_legalEntityData.json", JsonConvert.SerializeObject(_legalEntityData));
+            //TODO [goncharov] нужно дернуть sw.Stop(), а то как-то не хорошо, мне кажется.
             Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
         }
 
