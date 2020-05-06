@@ -4,10 +4,10 @@ namespace MongodbCollectionBanchmark.Models
 {
     public class InMemoryDb
     {
-        public List<Phone> phoneData {get; set;}
-        public List<Document> documentData {get; set;}
-        public List<Product> productData {get; set;}
-        public List<Person> personData {get; set;}
-        public List<LegalEntity> legalEntityData {get; set;}
+        public List<Phone> phoneData {get;} = new List<Phone>();
+        public List<Document> documentData {get;} = new List<Document>(); 
+        public List<Product> productData {get; } = new List<Product>();
+        public List<Person> personData {get; } = new List<Person>();
+        public List<LegalEntity> legalEntityData {get; } = new List<LegalEntity>();
     }
 }
