@@ -41,10 +41,11 @@ namespace MongodbCollectionBanchmark.Utils
         public void GenerateData()
         {
             _dataGenerator = new DataGenerator(Count, _faker, _inMemoryDb);
+            var _dataSaver = new DataSaver(_inMemoryDb);
             
             Console.WriteLine("Start generate data");
             _dataGenerator.PrepareDocs();
-            _dataGenerator.SaveData();
+            _dataSaver.SerializeData();
         }
 
         private void GlobalCleanup()

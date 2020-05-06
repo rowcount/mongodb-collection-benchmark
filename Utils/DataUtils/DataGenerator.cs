@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
 using Bogus.DataSets;
-using Newtonsoft.Json;
+
 
 namespace MongodbCollectionBanchmark.Utils
 {
@@ -99,15 +99,7 @@ namespace MongodbCollectionBanchmark.Utils
         }
 
         //TODO [goncharov] это не его зона ответственности. Лучше вынести отсюда.
-         public void SaveData()
-        {
-            Console.Write("Docs saving started...........");
-            var sw = Stopwatch.StartNew();
-            File.WriteAllText(@"/temp/_inMemoryDb.personData.json", JsonConvert.SerializeObject(_inMemoryDb.personData));
-            File.WriteAllText(@"/temp/_inMemoryDb.legalEntityData.json", JsonConvert.SerializeObject(_inMemoryDb.legalEntityData));
-            //TODO [goncharov] нужно дернуть sw.Stop(), а то как-то не хорошо, мне кажется.
-            Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
-        }
+        
 
     }
 }
