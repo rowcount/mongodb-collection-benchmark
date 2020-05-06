@@ -20,9 +20,6 @@ namespace MongodbCollectionBanchmark.Utils
         private readonly Faker _faker;
         private readonly InMemoryDb _inMemoryDb;
 
-        //TODO [goncharov] слешком много входных параметров, очивидно, что они объединяются в группы:
-        //TODO [goncharov] {phoneData, documentData, productData, personData, legalEntityData} == InMemoryDb, facker, count
-        //TODO [goncharov] count- очень непонятный параметр, если подумать как его правильно назвать, станет четче понятен его смысл.
         public DataGenerator (int objectCount, Faker faker, InMemoryDb inMemoryDb)
         {
             _objectCount = objectCount;
@@ -30,8 +27,8 @@ namespace MongodbCollectionBanchmark.Utils
             _inMemoryDb = inMemoryDb;
         }
 
-        //TODO [goncharov] логичнее назвать GenerateDocs или GenerateData.
-        public void PrepareDocs()
+
+        public void GenerateDocs()
         {
             Console.WriteLine("Preparing docs started");
             var sw = Stopwatch.StartNew();
@@ -94,12 +91,9 @@ namespace MongodbCollectionBanchmark.Utils
                 
             };
 
-            //TODO [goncharov] нужно дернуть sw.Stop(), а то как-то не хорошо, мне кажется.
+            sw.Stop();
             Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");            
         }
-
-        //TODO [goncharov] это не его зона ответственности. Лучше вынести отсюда.
-        
 
     }
 }

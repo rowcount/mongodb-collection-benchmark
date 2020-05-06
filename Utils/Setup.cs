@@ -44,7 +44,7 @@ namespace MongodbCollectionBanchmark.Utils
             var _dataSaver = new DataSaver(_inMemoryDb);
             
             Console.WriteLine("Start generate data");
-            _dataGenerator.PrepareDocs();
+            _dataGenerator.GenerateDocs();
             _dataSaver.SerializeData();
         }
 
