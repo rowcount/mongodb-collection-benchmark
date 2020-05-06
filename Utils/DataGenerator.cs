@@ -16,26 +16,18 @@ namespace MongodbCollectionBanchmark.Utils
 //TODO [goncharov] сделать статическим. 
     public class DataGenerator
     {
-        private readonly int _count;
+        private readonly int _objectCount;
         private readonly Faker _faker;
-        private readonly List<Phone> _phoneData;
-        private readonly List<Document> _documentData;
-        private readonly List<Product> _productData;
-        private readonly List<Person> _personData;
-        private readonly List<LegalEntity> _legalEntityData;
+        private readonly InMemoryDb _inMemoryDb;
 
         //TODO [goncharov] слешком много входных параметров, очивидно, что они объединяются в группы:
         //TODO [goncharov] {phoneData, documentData, productData, personData, legalEntityData} == InMemoryDb, facker, count
         //TODO [goncharov] count- очень непонятный параметр, если подумать как его правильно назвать, станет четче понятен его смысл.
-        public DataGenerator (int count, Faker faker, List<Phone> phoneData, List<Document> documentData, List<Product> productData, List<Person> personData, List<LegalEntity> legalEntityData)
+        public DataGenerator (int objectCount, Faker faker, InMemoryDb inMemoryDb)
         {
-            _count = count;
+            _objectCount = objectCount;
             _faker = faker ;
-            _phoneData = phoneData ;
-            _documentData = documentData;
-            _productData = productData;
-            _personData = personData ;
-            _legalEntityData = legalEntityData ;
+            _inMemoryDb = inMemoryDb;
         }
 
         //TODO [goncharov] логичнее назвать GenerateDocs или GenerateData.
@@ -43,16 +35,16 @@ namespace MongodbCollectionBanchmark.Utils
         {
             Console.WriteLine("Preparing docs started");
             var sw = Stopwatch.StartNew();
-            var userIds = new List<string>(_count / 100);
+            var userIds = new List<string>(_objectCount / 100);
             
-            foreach ( var i in Enumerable.Range(0, _count / 100))
+            foreach ( var i in Enumerable.Range(0, _objectCount / 100))
             {
                 var gender = _faker.PickRandom<Name.Gender>();
                 
                 var phones = new Faker<Phone>("ru")
                     .RuleFor(u => u.Number, f => f.Phone.PhoneNumber())
                     .Generate(3);
-                _phoneData.AddRange(phones);
+                _inMemoryDb.phoneData.AddRange(phones);
 
                 var documents = new Faker<Document>("ru")
                     .RuleFor(u => u.Passport, f => f.Finance.Account())
@@ -61,14 +53,14 @@ namespace MongodbCollectionBanchmark.Utils
                     .RuleFor(u => u.KPP, f => f.Finance.Account())
                     .RuleFor(u => u.SNILS, f => f.Finance.Account())
                     .Generate(1);
-                _documentData.AddRange(documents);
+                _inMemoryDb.documentData.AddRange(documents);
 
                 var products = new Faker<Product>("ru")
                     .RuleFor(u => u.Name, f => f.Commerce.Product())
                     .RuleFor(u => u.Code, f => f.Commerce.Ean13())
                     .RuleFor(u => u.Number, f => i)
                     .Generate(3);
-                _productData.AddRange(products);
+                _inMemoryDb.productData.AddRange(products);
 
                 var persons = new Faker<Person>("ru")
                     .RuleFor(u => u.PersonId, f => Guid.NewGuid())
@@ -83,7 +75,7 @@ namespace MongodbCollectionBanchmark.Utils
                     .RuleFor(u => u.Products, f => products)
                     .RuleFor(u => u.DateModify, f => f.Date.RecentOffset())
                     .Generate(1);
-                _personData.AddRange(persons);
+                _inMemoryDb.personData.AddRange(persons);
 
                 var legalEntities = new Faker<LegalEntity>("ru")
                     .RuleFor(u => u.LegalEntityId, f => Guid.NewGuid())
@@ -97,7 +89,7 @@ namespace MongodbCollectionBanchmark.Utils
                     .RuleFor(u => u.Products, f => products)
                     .RuleFor(u => u.DateModify, f => f.Date.RecentOffset())
                     .Generate(1);
-                _legalEntityData.AddRange(legalEntities);              
+                _inMemoryDb.legalEntityData.AddRange(legalEntities);              
                 
                 
             };
@@ -111,8 +103,8 @@ namespace MongodbCollectionBanchmark.Utils
         {
             Console.Write("Docs saving started...........");
             var sw = Stopwatch.StartNew();
-            File.WriteAllText(@"/temp/_personData.json", JsonConvert.SerializeObject(_personData));
-            File.WriteAllText(@"/temp/_legalEntityData.json", JsonConvert.SerializeObject(_legalEntityData));
+            File.WriteAllText(@"/temp/_inMemoryDb.personData.json", JsonConvert.SerializeObject(_inMemoryDb.personData));
+            File.WriteAllText(@"/temp/_inMemoryDb.legalEntityData.json", JsonConvert.SerializeObject(_inMemoryDb.legalEntityData));
             //TODO [goncharov] нужно дернуть sw.Stop(), а то как-то не хорошо, мне кажется.
             Console.WriteLine("done at " + sw.ElapsedMilliseconds + " ms");
         }

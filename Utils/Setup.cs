@@ -29,11 +29,7 @@ namespace MongodbCollectionBanchmark.Utils
         private const int Count = 100000;
         
         //TODO [goncharov] Эти поля логично вынести в отдельный класс InMemoryDb vvvvvvv
-        private readonly List<Phone> _phoneData = new List<Phone>(3);
-        private readonly List<Document> _documentData = new List<Document>(1);
-        private readonly List<Product> _productData = new List<Product>();
-        private readonly List<LegalEntity> _legalEntityData = new List<LegalEntity>(Count);
-        private readonly List<Person> _personData = new List<Person>(Count);       
+        private readonly InMemoryDb _inMemoryDb = new InMemoryDb();       
         //TODO [goncharov] Эти поля логично вынести в отдельный класс InMemoryDb ^^^^^^^^
         
         //TODO [goncharov] Мне кажется фэйкер- это зона ответственности Preparer (который надо переименовать в дата-генератор)
@@ -44,7 +40,7 @@ namespace MongodbCollectionBanchmark.Utils
         //TODO [goncharov] в качестве входного, имеет смысл, передавать путь к папке, где мы хотим сохранить скрипты базы.
         public void GenerateData()
         {
-            _dataGenerator = new DataGenerator(Count, _faker,_phoneData,_documentData,_productData,_personData,_legalEntityData);
+            _dataGenerator = new DataGenerator(Count, _faker, _inMemoryDb);
             
             Console.WriteLine("Start generate data");
             _dataGenerator.PrepareDocs();
