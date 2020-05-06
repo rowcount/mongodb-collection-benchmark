@@ -38,17 +38,17 @@ namespace MongodbCollectionBanchmark.Utils
         
         //TODO [goncharov] Мне кажется фэйкер- это зона ответственности Preparer (который надо переименовать в дата-генератор)
         private readonly Faker _faker = new Faker("ru");
-        private Preparer _preparer;
+        private DataGenerator _dataGenerator;
 
         //TODO [goncharov] лучше переименовать GenerateInitialScripts
         //TODO [goncharov] в качестве входного, имеет смысл, передавать путь к папке, где мы хотим сохранить скрипты базы.
         public void GenerateData()
         {
-            _preparer = new Preparer(Count, _faker,_phoneData,_documentData,_productData,_personData,_legalEntityData);
+            _dataGenerator = new DataGenerator(Count, _faker,_phoneData,_documentData,_productData,_personData,_legalEntityData);
             
             Console.WriteLine("Start generate data");
-            _preparer.PrepareDocs();
-            _preparer.SaveData();
+            _dataGenerator.PrepareDocs();
+            _dataGenerator.SaveData();
         }
 
         private void GlobalCleanup()

@@ -13,9 +13,8 @@ using Newtonsoft.Json;
 
 namespace MongodbCollectionBanchmark.Utils
 {
-//TODO [goncharov] Лучше назвать его DataGenerator
-// сделать статическим. 
-    public class Preparer
+//TODO [goncharov] сделать статическим. 
+    public class DataGenerator
     {
         private readonly int _count;
         private readonly Faker _faker;
@@ -28,7 +27,7 @@ namespace MongodbCollectionBanchmark.Utils
         //TODO [goncharov] слешком много входных параметров, очивидно, что они объединяются в группы:
         //TODO [goncharov] {phoneData, documentData, productData, personData, legalEntityData} == InMemoryDb, facker, count
         //TODO [goncharov] count- очень непонятный параметр, если подумать как его правильно назвать, станет четче понятен его смысл.
-        public Preparer (int count, Faker faker, List<Phone> phoneData, List<Document> documentData, List<Product> productData, List<Person> personData, List<LegalEntity> legalEntityData)
+        public DataGenerator (int count, Faker faker, List<Phone> phoneData, List<Document> documentData, List<Product> productData, List<Person> personData, List<LegalEntity> legalEntityData)
         {
             _count = count;
             _faker = faker ;
