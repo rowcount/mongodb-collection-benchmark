@@ -1,11 +1,10 @@
 using System;
-using System.IO;
 using System.Diagnostics;
-using System.Collections.Generic;
+using System.IO;
 using MongodbCollectionBanchmark.Models;
 using Newtonsoft.Json;
 
-namespace MongodbCollectionBanchmark.Utils
+namespace MongodbCollectionBanchmark.Utils.DataUtils
 {
     public class DataSaver
     {

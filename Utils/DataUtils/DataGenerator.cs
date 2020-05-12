@@ -1,17 +1,15 @@
 using System;
-using System.IO;
-using MongodbCollectionBanchmark.Models;
-using Bogus;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Bogus;
+using Bogus.DataSets;
+using MongodbCollectionBanchmark.Models;
 using Person = MongodbCollectionBanchmark.Models.Person;
 using Document = MongodbCollectionBanchmark.Models.Document;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Linq;
-using Bogus.DataSets;
 
 
-namespace MongodbCollectionBanchmark.Utils
+namespace MongodbCollectionBanchmark.Utils.DataUtils
 {
 //TODO [goncharov] сделать статическим. 
     public class DataGenerator

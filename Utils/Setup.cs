@@ -8,6 +8,7 @@ using MongodbCollectionBanchmark.Models;
 using Person = MongodbCollectionBanchmark.Models.Person;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongodbCollectionBanchmark.Utils.DataUtils;
 
 namespace MongodbCollectionBanchmark.Utils
 {
